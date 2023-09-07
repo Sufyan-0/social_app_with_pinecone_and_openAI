@@ -1,12 +1,23 @@
 import React, { useRef, useState } from 'react'
 import Card from "./Card"
+import axios from "axios"
 
 function Form() {
     const  [FromData , setFormData] = useState([])
     const titleRef = useRef("")
     const descriptionRef = useRef("") 
-    const formData = (event)=>{
+    const baseURL = " http://localhost:3000"
+    const formData = async(event)=>{
+    
         event.preventDefault()
+        try{
+          const res = await axios.post(`${baseURL}/api/v1/postStory`)
+          console.log(res)
+          console.log("Called")
+
+        }catch(e){
+          console.log(e)
+        }
         // console.log(titleRef?.current?.value)
         // console.log(titleRef?.current?.descriptionRef)
         let title = titleRef?.current?.value 
