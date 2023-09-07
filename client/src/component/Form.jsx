@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
+import Card from "./Card"
 
 function Form() {
+    const  [FromData , setFormData] = useState([])
+    const titleRef = useRef("")
+    const descriptionRef = useRef("") 
     const formData = (event)=>{
         event.preventDefault()
+        // console.log(titleRef?.current?.value)
+        // console.log(titleRef?.current?.descriptionRef)
+        let title = titleRef?.current?.value 
+        let desc = descriptionRef?.current?.value
+        setFormData((previosData)=> [...previosData , {title , desc}  ])
         console.log("Form Data")
+        console.log(FromData)
     }
+    
     return (<>
      
      <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -18,7 +29,7 @@ function Form() {
               id="title"
               placeholder="Enter Your title"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-         
+             ref={titleRef}
               required
             />
           </div>
@@ -29,7 +40,7 @@ function Form() {
               id="description"
               placeholder="Enter your description"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-            
+              ref={descriptionRef}
             
               required
             />
@@ -43,6 +54,7 @@ function Form() {
         </form>
       </div>
     </div>
+   <Card data = {FromData}></Card>
     </>
     )
 }
