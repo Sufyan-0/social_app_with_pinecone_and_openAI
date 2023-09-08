@@ -1,9 +1,13 @@
+
 import Form from './component/Form';
 import './index.css';
 
 function App() {
-  return (
+  return (<>
     <Form/>
+   
+  </>
+    
   );
 }
 

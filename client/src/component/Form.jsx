@@ -1,13 +1,12 @@
 import React, { useRef, useState } from 'react';
-import Card from './Card';
 import axios from 'axios';
+import Card from './Card';
 
 function Form() {
-  const [formData, setFormData] = useState([]);
   const titleRef = useRef('');
   const descriptionRef = useRef('');
   const baseURL = 'http://localhost:8080';
-
+  const [err , seterr] =  useState("")
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -19,13 +18,11 @@ function Form() {
         title: title,
         desc: desc,
       })
-      setFormData((previousData) => [...previousData, { title, desc }]);
-      console.log('Form Data');
-      console.log(formData);
       event.target.reset();
       // console.log(res.data); // Assuming the server returns data
       console.log('Called');
-      console.log(res)
+      console.log(res.data.message)
+      seterr(res.data.message)
     } catch (error) {
       console.error(error);
     }
@@ -72,9 +69,10 @@ function Form() {
               Post
             </button>
           </form>
+        <p>{err}</p>
         </div>
       </div>
-      <Card data={formData}></Card>
+      <Card/>
     </>
   );
 }
