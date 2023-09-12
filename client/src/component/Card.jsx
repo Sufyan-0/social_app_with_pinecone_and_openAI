@@ -17,6 +17,12 @@ function Card(props) {
 
   },[])
   console.log(props.data)
+  const EditFunction =()=>{
+    alert("Edit Function Working Soon")
+  }
+  const Deletefunction = ()=>{
+    alert("Delete Function Working Soon")
+  }
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
@@ -27,6 +33,10 @@ function Card(props) {
               <h2 className="text-lg font-semibold">{item?.metadata?.title}</h2>
             </div>
             <p className="mt-2 text-gray-700">{item?.metadata?.body}</p>
+            <br />
+            <button onClick={EditFunction} className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-700 mx-3">Edit</button>
+            <button onClick={Deletefunction} className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-700">Delete</button>
+
           </div>
         ))}
       </div>
