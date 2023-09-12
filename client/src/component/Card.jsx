@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 function Card() {
   const [ResponseData, setResponseData] = useState([]);
+  const searchInputRef = useRef("")
 
   async function fetchData() {
     try {
@@ -36,16 +37,47 @@ function Card() {
     try {
       const response = await axios.delete(`http://localhost:8080/api/v1/story/${id}`);
       console.log('response: ', response.data);
-      fetchData();
+      
+     await fetchData();
     } catch (e) {
       console.log(e);
     }
   };
 
+
+  const searchStories = async (e) => {
+    e.preventDefault();
+    try {
+      // setIsLoading(true);
+      const resp = await axios.get(`http://localhost:8080/api/v1/search?q=${searchInputRef.current.value}`)
+      // console.log(resp.data);
+      setResponseData(resp.data);
+
+      // setIsLoading(false);
+    } catch (e) {
+      // setIsLoading(false);
+      console.log(e);
+    }
+
+  }
+
   return (
-    <>
+    <>    <form onSubmit={searchStories} className="text-right my-14">
+      <div className="relative">
+        <input
+          ref={searchInputRef}
+          id="searchInput"
+          type="search"
+          placeholder="Search"
+          className="border rounded-full py-2 px-4 focus:outline-none focus:ring focus:border-blue-300 w-64"
+        />
+        <button type="submit" hidden>Search</button>
+      </div>
+    </form>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {ResponseData.map((eachStory , index) => (
+
+        {ResponseData.map((eachStory, index) => (
           <div key={index} className="bg-white rounded-lg p-4 mx-4 my-4 shadow-lg border border-gray-300">
             {eachStory.isEdit ? (
               <form onSubmit={(e) => updateStory(e, eachStory.id)}>
