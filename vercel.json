@@ -1,0 +1,6 @@
+{
+    "version" : 2,
+    "name" : "Social-App",
+    "builds" : [{"src" : "index.mjs" , "use" : "@vercel/node"}],
+    "routes" : [{"src": "/(.*)" , "dest" :"index.mjs"}]
+}

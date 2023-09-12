@@ -26,7 +26,6 @@ app.use(cors());
 
 app.use(express.json());
 // app.get(express.static(path.join(__dirname, "./client/build")));
-app.use("/", express.static(path.join(__dirname, "./client/build")));
 
 // Create a product
 app.post(`/api/v1/postStory`, async (req, res) => {
@@ -160,6 +159,7 @@ app.delete("/api/v1/story/:id", async (req, res) => {
     const deleteResponse = await index.delete1({
       ids: [req.params.id],
       // namespace: process.env.PINECONE_NAME_SPACE 
+      
     })
     console.log("deleteResponse: ", deleteResponse);
 
@@ -181,3 +181,5 @@ app.delete("/api/v1/story/:id", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
 });
+
+app.use("/", express.static(path.join(__dirname, "./client/build")));
