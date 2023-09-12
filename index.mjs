@@ -102,6 +102,80 @@ app.get("/api/v1/allpost", async (req, res) => {
   console.log("Donw", queryResponse.matches)
 });
 
+app.put("/api/v1/story/:id", async (req, res) => {
+
+
+  console.log("req.params.id: ", req.params.id);
+  console.log("req.body: ", req.body);
+  // {
+  //     title: "abc title",
+  //     body: "abc text"
+  // }
+
+  // since pine cone can only store data in vector form (numeric representation of text)
+  // we will have to convert text data into vector of a certain dimension (1536 in case of openai)
+  const response = await openai.embeddings.create({
+    model: "text-embedding-ada-002",
+    input: `${req.body?.title} ${req.body?.body}`,
+  });
+  console.log("response?.data: ", response?.data);
+  const vector = response?.data[0]?.embedding
+  console.log("vector: ", vector);
+  // [ 0.0023063174, -0.009358601, 0.01578391, ... , 0.01678391, ]
+
+
+  const index = pinecone.Index(process.env.PINECONE_INDEX_NAME);
+  const upsertRequest = {
+    vectors: [
+      {
+        id: req.params.id, // unique id, // unique id
+        values: vector,
+        metadata: {
+          title: req.body?.title,
+          body: req.body?.body,
+        }
+      }
+    ],
+    // namespace: process.env.PINECONE_NAME_SPACE,
+  };
+  try {
+    const upsertResponse = await index.upsert({ upsertRequest });
+    console.log("upsertResponse: ", upsertResponse);
+
+    res.send({
+      message: "story updated successfully"
+    });
+  } catch (e) {
+    console.log("error: ", e)
+    res.status(500).send({
+      message: "failed to create story, please try later"
+    });
+  }
+});
+
+app.delete("/api/v1/story/:id", async (req, res) => {
+
+  try {
+    const index = pinecone.Index(process.env.PINECONE_INDEX_NAME);
+    const deleteResponse = await index.delete1({
+      ids: [req.params.id],
+      // namespace: process.env.PINECONE_NAME_SPACE 
+    })
+    console.log("deleteResponse: ", deleteResponse);
+
+    res.send({
+      message: "story deleted successfully"
+    });
+
+  } catch (e) {
+    console.log("error: ", e)
+    res.status(500).send({
+      message: "failed to create story, please try later"
+    });
+  }
+
+});
+
 
 // Start the server
 app.listen(PORT, () => {
