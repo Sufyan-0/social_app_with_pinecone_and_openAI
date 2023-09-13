@@ -25,7 +25,7 @@ await pinecone.init({
 app.use(cors());
 
 app.use(express.json());
-// app.get(express.static(path.join(__dirname, "./client/build")));
+app.get(express.static(path.join(__dirname, "./client/build")));
 
 // Create a product
 app.post(`/api/v1/postStory`, async (req, res) => {
