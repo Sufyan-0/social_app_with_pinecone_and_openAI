@@ -22,10 +22,12 @@ await pinecone.init({
   apiKey: process.env.PINECONE_API_KEY,
 });
 
-app.use(cors());
+
 
 app.use(express.json());
-app.get("/" , express.static(path.join(__dirname, "./client/build")));
+app.use(cors());
+app.get(express.static(path.join(__dirname, "./client/build")));
+app.use("/" , express.static(path.join(__dirname, "./client/build")));
 
 // Create a product
 app.post(`/api/v1/postStory`, async (req, res) => {
